@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do List</title>
+    <link rel="stylesheet" type="text/css" href="ToDo.css">   
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1> 
+        <input type="text" id="taskName" placeholder="Task Name">
+        <input type="text" id="taskDescription" placeholder="Task Description">
+        <button onclick="addTask()">Add</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="taskList"></tbody>
+        </table>
+    </div>
+
+    <script>
+        function addTask() {
+            const taskName = document.getElementById('taskName').value.trim();
+            const taskDescription = document.getElementById('taskDescription').value.trim();
+
+            if (taskName && taskDescription) {
+                const tr = document.createElement('tr');
+
+                const nameTd = document.createElement('td');
+                nameTd.textContent = taskName;
+
+                const descriptionTd = document.createElement('td');
+                descriptionTd.textContent = taskDescription;
+
+                const actionsTd = document.createElement('td');
+                actionsTd.appendChild(DetailButton(taskName, taskDescription));
+                actionsTd.appendChild(EditButton(nameTd, descriptionTd));
+                actionsTd.appendChild(DeleteButton());
+
+                tr.appendChild(nameTd);
+                tr.appendChild(descriptionTd);
+                tr.appendChild(actionsTd);
+
+                const taskList = document.getElementById('taskList');
+                taskList.appendChild(tr);
+
+                document.getElementById('taskName').value = '';
+                document.getElementById('taskDescription').value = '';
+            }
+        }
+
+        function DetailButton(name, description) {
+            const button = document.createElement('button');
+            button.textContent = 'View Details';
+            button.onclick = function() {
+                alert(`Task: ${name}\nDescription: ${description}`);
+            };
+            return button;
+        }
+
+        function EditButton(nameTd, descriptionTd) {
+            const button = document.createElement('button');
+            button.textContent = 'Edit';
+            button.onclick = function() {
+                const newName = prompt('Enter new task name:', nameTd.textContent);
+                const newDescription = prompt('Enter new task description:', descriptionTd.textContent);
+                
+                if (newName) nameTd.textContent = newName;
+                if (newDescription) descriptionTd.textContent = newDescription;
+            };
+            return button;
+        }
+
+        function DeleteButton() {
+            const button = document.createElement('button');
+            button.textContent = 'Delete';
+            button.onclick = function() {
+                const tr = this.parentNode.parentNode;
+                tr.parentNode.removeChild(tr);
+            };
+            return button;
+        }
+    </script>
+</body>
+</html>
